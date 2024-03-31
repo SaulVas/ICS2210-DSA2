@@ -190,5 +190,26 @@ class AVLTree:
 
         new_count = self._get_leaves(node.left, count)
         return self._get_leaves(node.right, new_count)
-        
-        
+
+    def in_order_traversal(self):
+        """
+        Performs an in-order traversal of the AVL tree.
+
+        This method recursively traverses the tree in an in-order manner,
+        visiting the left subtree, then the current node, and finally the
+        right subtree.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
+        self._in_order_traversal(self.root)
+
+    def _in_order_traversal(self, node):
+        if not node:
+            return
+        self._in_order_traversal(node.left)
+        print(node.key)
+        self._in_order_traversal(node.right)
