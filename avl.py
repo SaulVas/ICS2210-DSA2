@@ -10,6 +10,9 @@ Classes:
 
 """
 
+from typing import Any
+
+
 class AVLNode:
     """
     Represents a node in an AVL tree.
@@ -191,21 +194,25 @@ class AVLTree:
         new_count = self._get_leaves(node.left, count)
         return self._get_leaves(node.right, new_count)
 
-    def in_order_traversal(self):
+    def traverse(self, string):
         """
-        Performs an in-order traversal of the AVL tree.
-
-        This method recursively traverses the tree in an in-order manner,
-        visiting the left subtree, then the current node, and finally the
-        right subtree.
+        Traverses the AVL tree in the specified order.
 
         Parameters:
-            None
+        - string (str): The traversal order. Valid values are "in_order", "post_order", and "pre_order".
 
         Returns:
-            None
+        - None
+
+        Raises:
+        - None
         """
-        self._in_order_traversal(self.root)
+        if string.lower() == "in_order":
+            self._in_order_traversal(self.root)
+        elif string.lower() == "post_order":
+            self._post_order_traversal(self.root)
+        elif string.lower() == "pre_order":
+            self._pre_order_traversal(self.root)
 
     def _in_order_traversal(self, node):
         if not node:
@@ -213,3 +220,39 @@ class AVLTree:
         self._in_order_traversal(node.left)
         print(node.key)
         self._in_order_traversal(node.right)
+
+    def _pre_order_traversal(self, node):
+        if not node:
+            return
+        print(node.key)
+        self._pre_order_traversal(node.left)
+        self._pre_order_traversal(node.right)
+
+    def _post_order_traversal(self, node):
+        if not node:
+            return
+        self._post_order_traversal(node.left)
+        self._post_order_traversal(node.right)
+        print(node.key)
+
+    def search(self, key):
+        """
+        Search for a node with the given key in the AVL tree.
+
+        Parameters:
+        - key: The key to search for.
+
+        Returns:
+        - True if found and False if otherwise
+        """
+        return self._search(self.root, key)
+
+    def _search(self, node, key):
+        if not node:
+            return False
+        if key == node.key:
+            return True
+        if key < node.left:
+            return self._search(node.left, key)
+        else:
+            return self._search(node.right, key)
