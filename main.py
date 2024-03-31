@@ -4,8 +4,6 @@
 
 from random import randint
 from statistics import mean, stdev, median
-
-from numpy import insert
 from avl import AVLTree
 
 def knuth_shuffle(array):

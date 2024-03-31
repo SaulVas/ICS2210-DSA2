@@ -10,9 +10,6 @@ Classes:
 
 """
 
-from typing import Any
-
-
 class AVLNode:
     """
     Represents a node in an AVL tree.
@@ -199,7 +196,8 @@ class AVLTree:
         Traverses the AVL tree in the specified order.
 
         Parameters:
-        - string (str): The traversal order. Valid values are "in_order", "post_order", and "pre_order".
+        - string (str): The traversal order. Valid values are 
+        "in_order", "post_order", and "pre_order".
 
         Returns:
         - None
