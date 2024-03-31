@@ -254,5 +254,5 @@ class AVLTree:
             return True
         if key < node.left:
             return self._search(node.left, key)
-        else:
-            return self._search(node.right, key)
+
+        return self._search(node.right, key)
