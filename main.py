@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
 
     # Insertion of Second array
-    second_integers = [randint(1, 100000) for _ in range(1000)]
+    second_integers = [randint(1, 100000) for _ in range(1001)]
 
     # AVL Tree section
     insertion_steps = []
