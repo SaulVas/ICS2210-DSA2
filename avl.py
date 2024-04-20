@@ -1,27 +1,10 @@
 """
-This module defines the AVLTree class, which represents an AVL Tree data structure.
-
-An AVL Tree is a self-balancing binary search tree, where the heights of the left and right subtrees
-of any node differ by at most one.
-
-Classes:
-    AVKLNode: A class representing a Node in an AVL tree
-    AVLTree: A class representing an AVL Tree data structure.
-
 """
-
 from binary_tree import BinaryTree
-
 
 class AVLNode:
     """
-    Represents a node in an AVL tree.
-
-    Attributes:
-        key: The key value stored in the node.
-        left: The left child of the node.
-        right: The right child of the node.
-        height: The height of the node in the AVL tree.
+    
     """
 
     def __init__(self, key):
@@ -30,25 +13,19 @@ class AVLNode:
         self.right = None
         self.height = 0
 
+    def __str__(self):
+        return f"{self.key}"
+
     def set_height(self, new_height):
         """
-        Sets the height of the node.
-
-        Args:
-            new_height (int): The new height value to be set.
+        
         """
         self.height = new_height
 
 
 class AVLTree(BinaryTree):
     """
-    A class representing an AVL Tree data structure.
-
-    Attributes:
-        root (AVLNode): The root node of the AVL Tree.
-
-    Methods:
-        insert(key): Inserts a new key into the AVL Tree.
+    
     """
     def _insert(self, node, key):
         # Rec cases
@@ -90,9 +67,8 @@ class AVLTree(BinaryTree):
 
         # Reset heights
         node.set_height(1 + max(self._get_height(node.left), self._get_height(node.right)))
-        right_tree.set_height(1 +
-                              max(self._get_height(right_tree.left),
-                                  self._get_height(right_tree.right)))
+        right_tree.set_height(1 + max(self._get_height(right_tree.left),
+                                      self._get_height(right_tree.right)))
 
         return right_tree
 

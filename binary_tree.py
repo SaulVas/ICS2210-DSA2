@@ -11,7 +11,7 @@ class BinaryTree(ABC):
 
     def traverse(self, string):
         """
-        Traverses the AVL tree in the specified order.
+        Traverses the  tree in the specified order.
 
         Parameters:
         - string (str): The traversal order. Valid values are 
@@ -53,7 +53,7 @@ class BinaryTree(ABC):
 
     def search(self, key):
         """
-        Search for a node with the given key in the AVL tree.
+        Search for a node with the given key in the tree.
 
         Parameters:
         - key: The key to search for.
@@ -75,10 +75,10 @@ class BinaryTree(ABC):
 
     def insert(self, key):
         """
-        Inserts a new key into the AVL Tree.
+        Inserts a new key into the Tree.
 
         Args:
-            key: The key to be inserted into the AVL Tree.
+            key: The key to be inserted into the Tree.
         """
         self.root = self._insert(self.root, key)
 
@@ -88,10 +88,10 @@ class BinaryTree(ABC):
 
     def get_leaves(self):
         """
-        Returns the number of leaves in the AVL tree.
+        Returns the number of leaves in the tree.
 
         Returns:
-            int: The number of leaves in the AVL tree.
+            int: The number of leaves in the tree.
         """
         leaves = 0
         return self._get_leaves(self.root, leaves)
@@ -107,11 +107,11 @@ class BinaryTree(ABC):
 
     def insertion_steps_and_rotation(self, key):
         """
-        Perform an insertion of a key into the AVL tree and return the number 
+        Perform an insertion of a key into the tree and return the number 
         of steps taken and whether a rotation was performed or not.
 
         Parameters:
-        - key: The key to be inserted into the AVL tree.
+        - key: The key to be inserted into the tree.
 
         Returns:
         A tuple containing the number of steps taken during the 
