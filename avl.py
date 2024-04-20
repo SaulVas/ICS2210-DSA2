@@ -10,6 +10,9 @@ Classes:
 
 """
 
+from binary_tree import BinaryTree
+
+
 class AVLNode:
     """
     Represents a node in an AVL tree.
@@ -37,7 +40,7 @@ class AVLNode:
         self.height = new_height
 
 
-class AVLTree:
+class AVLTree(BinaryTree):
     """
     A class representing an AVL Tree data structure.
 
@@ -47,49 +50,6 @@ class AVLTree:
     Methods:
         insert(key): Inserts a new key into the AVL Tree.
     """
-
-    def __init__(self):
-        self.root = None
-
-    def insert(self, key):
-        """
-        Inserts a new key into the AVL Tree.
-
-        Args:
-            key: The key to be inserted into the AVL Tree.
-        """
-        self.root = self._insert(self.root, key)
-
-    def _get_height(self, node):
-        if not node:
-            return 0
-        return node.height
-
-    def _rotate_left(self, node):
-        right_tree = node.right
-        node.right = right_tree.left
-        right_tree.left = node
-
-        # Reset heights
-        node.set_height(1 + max(self._get_height(node.left), self._get_height(node.right)))
-        right_tree.set_height(1 +
-                              max(self._get_height(right_tree.left),
-                                  self._get_height(right_tree.right)))
-
-        return right_tree
-
-    def _rotate_right(self, node):
-        left_tree = node.left
-        node.left = left_tree.right
-        left_tree.right = node
-
-        # Reset heights
-        node.height = 1 + max(self._get_height(node.left), self._get_height(node.right))
-        left_tree.height = 1 + max(self._get_height(left_tree.left),
-                                   self._get_height(left_tree.right))
-
-        return left_tree
-
     def _insert(self, node, key):
         # Rec cases
         if node is None:
@@ -123,20 +83,30 @@ class AVLTree:
 
         return node
 
-    def insertion_steps_and_rotation(self, key):
-        """
-        Perform an insertion of a key into the AVL tree and return the number 
-        of steps taken and whether a rotation was performed or not.
+    def _rotate_left(self, node):
+        right_tree = node.right
+        node.right = right_tree.left
+        right_tree.left = node
 
-        Parameters:
-        - key: The key to be inserted into the AVL tree.
+        # Reset heights
+        node.set_height(1 + max(self._get_height(node.left), self._get_height(node.right)))
+        right_tree.set_height(1 +
+                              max(self._get_height(right_tree.left),
+                                  self._get_height(right_tree.right)))
 
-        Returns:
-        A tuple containing the number of steps taken during the 
-        insertion process and 1 if a rotation occured or 0 otherwise.
-        """
-        self.root, steps, rotation = self._insert_steps_and_rotation(self.root, key)
-        return (steps, rotation)
+        return right_tree
+
+    def _rotate_right(self, node):
+        left_tree = node.left
+        node.left = left_tree.right
+        left_tree.right = node
+
+        # Reset heights
+        node.height = 1 + max(self._get_height(node.left), self._get_height(node.right))
+        left_tree.height = 1 + max(self._get_height(left_tree.left),
+                                   self._get_height(left_tree.right))
+
+        return left_tree
 
     def _insert_steps_and_rotation(self, node, key):
         # Rec cases
@@ -170,87 +140,3 @@ class AVLTree:
             return (self._rotate_left(node), steps + 1, rotation + 1)
 
         return (node, steps + 1, rotation)
-
-    def get_leaves(self):
-        """
-        Returns the number of leaves in the AVL tree.
-
-        Returns:
-            int: The number of leaves in the AVL tree.
-        """
-        leaves = 0
-        return self._get_leaves(self.root, leaves)
-
-
-    def _get_leaves(self, node, count):
-        if not node:
-            return count
-        if node.left is None and node.right is None:
-            return count + 1
-
-        new_count = self._get_leaves(node.left, count)
-        return self._get_leaves(node.right, new_count)
-
-    def traverse(self, string):
-        """
-        Traverses the AVL tree in the specified order.
-
-        Parameters:
-        - string (str): The traversal order. Valid values are 
-        "in_order", "post_order", and "pre_order".
-
-        Returns:
-        - None
-
-        Raises:
-        - None
-        """
-        if string.lower() == "in_order":
-            self._in_order_traversal(self.root)
-        elif string.lower() == "post_order":
-            self._post_order_traversal(self.root)
-        elif string.lower() == "pre_order":
-            self._pre_order_traversal(self.root)
-
-    def _in_order_traversal(self, node):
-        if not node:
-            return
-        self._in_order_traversal(node.left)
-        print(node.key)
-        self._in_order_traversal(node.right)
-
-    def _pre_order_traversal(self, node):
-        if not node:
-            return
-        print(node.key)
-        self._pre_order_traversal(node.left)
-        self._pre_order_traversal(node.right)
-
-    def _post_order_traversal(self, node):
-        if not node:
-            return
-        self._post_order_traversal(node.left)
-        self._post_order_traversal(node.right)
-        print(node.key)
-
-    def search(self, key):
-        """
-        Search for a node with the given key in the AVL tree.
-
-        Parameters:
-        - key: The key to search for.
-
-        Returns:
-        - True if found and False if otherwise
-        """
-        return self._search(self.root, key)
-
-    def _search(self, node, key):
-        if not node:
-            return False
-        if key == node.key:
-            return True
-        if key < node.left:
-            return self._search(node.left, key)
-
-        return self._search(node.right, key)
