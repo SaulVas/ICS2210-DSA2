@@ -5,6 +5,7 @@
 from random import randint
 from statistics import mean, stdev, median
 from avl import AVLTree
+from red_black import RedBlackTree
 
 def knuth_shuffle(array):
     """
@@ -21,15 +22,15 @@ def knuth_shuffle(array):
         array[index], array[swap_index] = array[swap_index], array[index]
 
 if __name__ == "__main__":
-    # Insertion of First array
     integers = list(range(1, 5001))
     knuth_shuffle(integers)
 
-    # AVL Tree section
+    # initial insert
     avl_tree = AVLTree()
+    rb_tree = RedBlackTree()
     for number in integers:
         avl_tree.insert(number)
-
+        rb_tree.insert(number)
 
     # Insertion of Second array
     second_integers = [randint(1, 100000) for _ in range(1001)]

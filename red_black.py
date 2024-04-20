@@ -12,19 +12,25 @@ class RedBlackNode:
         return self.red
 
 class RedBlackTree(BinaryTree):
+    def insert(self, key):
+        new_node = self._insert(self.root, key)
+        self._restore_rb_properties(new_node, self.root)
+
     def _insert(self, node, key):
         if node is None:
             new_node = RedBlackNode(key, is_red=True)
             return new_node
 
         if key < node.key:
-            node.left = self._insert(node.left, key)
-            node.left.parent = node
+            child = self._insert(node.left, key)
+            node.left = child
+            child.parent = node
         else:
-            node.right = self._insert(node.right, key)
-            node.right.parent = node
+            child = self._insert(node.right, key)
+            node.right = child
+            child.parent = node
 
-        return self._restore_rb_properties(node, self.root)
+        return child
 
     def _restore_rb_properties(self, node, root):
         if node.parent is None:
@@ -96,3 +102,6 @@ class RedBlackTree(BinaryTree):
 
         left_child.right = node
         node.parent = left_child
+
+    def _insert_steps_and_rotation(self, node, key):
+        pass
