@@ -32,8 +32,6 @@ if __name__ == "__main__":
         avl_tree.insert(number)
         rb_tree.insert(number)
 
-    print(rb_tree.is_rb_tree())
-
     # Insertion of Second array
     second_integers = [randint(1, 100000) for _ in range(1001)]
 
