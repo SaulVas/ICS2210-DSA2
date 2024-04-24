@@ -13,57 +13,71 @@ class RedBlackNode:
 
 class RedBlackTree(BinaryTree):
     def insert(self, key):
-        new_node = self._insert(self.root, key)
-        self._restore_rb_properties(new_node, self.root)
+        self._insert(None, self.root, key)
 
-    def _insert(self, node, key):
+    def _insert(self, parent, node, key):
         if node is None:
-            new_node = RedBlackNode(key, is_red=True)
-            return new_node
-
-        if key < node.key:
-            child = self._insert(node.left, key)
-            node.left = child
-            child.parent = node
+            node = RedBlackNode(key)
+            node.parent = parent
+            if parent:
+                if key < parent.key:
+                    parent.left = node
+                else:
+                    parent.right = node
+            self._restore_rb_properties(node)
+        elif key < node.key:
+            self._insert(node, node.left, key)
         else:
-            child = self._insert(node.right, key)
-            node.right = child
-            child.parent = node
+            self._insert(node, node.right, key)
 
-        return child
-
-    def _restore_rb_properties(self, node, root):
+    def _restore_rb_properties(self, node):
+        # base case, node is root
         if node.parent is None:
             node.red = False
+            self.root = node
             return node
 
+        # parent is black, no action needed
         if not node.parent.red:
-            return root
+            return node
 
         parent = node.parent
         grandparent = parent.parent
-        uncle = grandparent.left if grandparent.left != parent else grandparent.right
 
+        if grandparent:
+            uncle = grandparent.left if grandparent.left != parent else grandparent.right
+        else:
+            uncle = None
+
+        # case 1: uncle is red
         if uncle and uncle.red:
             parent.red = False
             uncle.red = False
             grandparent.red = True
-            return self._restore_rb_properties(grandparent, root)
+            self._restore_rb_properties(grandparent)
+            return node
 
-        if parent == grandparent.left and node == parent.right:
+        # case 2: uncle is black
+        if grandparent and parent == grandparent.left and node == parent.right:
             self._left_rotate(parent)
-        elif parent == grandparent.right and node == parent.left:
+        elif grandparent and parent == grandparent.right and node == parent.left:
             self._right_rotate(parent)
 
-        if parent == grandparent.left:
+        parent = node
+
+        if grandparent and parent.key < grandparent.key:
             self._right_rotate(grandparent)
-        else:
+        elif grandparent and parent.key >= grandparent.key:
             self._left_rotate(grandparent)
 
-        parent.red = False
-        grandparent.red = True
+        parent.red = not parent.red
+        if grandparent:
+            grandparent.red = not grandparent.red
 
-        return root
+
+        self._restore_rb_properties(grandparent)
+
+        return node
 
     def _left_rotate(self, node):
         right_child = node.right
@@ -103,5 +117,87 @@ class RedBlackTree(BinaryTree):
         left_child.right = node
         node.parent = left_child
 
-    def _insert_steps_and_rotation(self, node, key):
-        pass
+    def insertion_steps_and_rotation(self, key):
+        new_node, steps = self._insert_steps(self.root, key)
+        self.root, rotations = self._restore_rb_properties_tracking_rotations(new_node,
+                                                                              self.root, 0)
+        return (steps, rotations)
+
+    def _insert_steps(self, node, key):
+        if node is None:
+            return (RedBlackNode(key), 0)
+
+        if key < node.key:
+            (child, steps) = self._insert_steps(node.left, key)
+            node.left = child
+            child.parent = node
+        else:
+            (child, steps) = self._insert_steps(node.right, key)
+            node.right = child
+            child.parent = node
+
+        return (child, steps + 1)
+
+    def _restore_rb_properties_tracking_rotations(self, node, root, rotations):
+        rotations_this_call = 0
+        if node.parent is None:
+            node.red = False
+            return (node, rotations)
+
+        if not node.parent.red:
+            return (root, rotations)
+
+        parent = node.parent
+        grandparent = parent.parent
+        uncle = grandparent.left if grandparent.left != parent else grandparent.right
+
+        if uncle and uncle.red:
+            parent.red = False
+            uncle.red = False
+            grandparent.red = True
+            return self._restore_rb_properties_tracking_rotations(grandparent, root, rotations)
+
+        if parent == grandparent.left and node == parent.right:
+            self._left_rotate(parent)
+            rotations += 1
+            rotations_this_call += 1
+        elif parent == grandparent.right and node == parent.left:
+            self._right_rotate(parent)
+            rotations += 1
+            rotations_this_call += 1
+
+        if parent == grandparent.left:
+            self._right_rotate(grandparent)
+            if rotations_this_call == 0:
+                rotations += 1
+        else:
+            self._left_rotate(grandparent)
+            if rotations_this_call == 0:
+                rotations += 1
+
+        parent.red = False
+        grandparent.red = True
+
+        return (root, rotations)
+
+    def is_rb_tree(self):
+        return self._is_rb_tree(self.root)[0]
+
+    def _is_rb_tree(self, node):
+        if not node:
+            return True, 1
+
+        if not node.parent and node.red:
+            return False, 0
+
+        if node.red:
+            num_blacks = 0
+            if (node.left and node.left.red) or (node.right and node.right.red):
+                return False, -1
+        else:
+            num_blacks = 1
+
+        right, num_blacks_right = self._is_rb_tree(node.right)
+        left, num_blacks_left = self._is_rb_tree(node.left)
+
+        return all([right, left, num_blacks_right == num_blacks_left]), num_blacks_right + num_blacks

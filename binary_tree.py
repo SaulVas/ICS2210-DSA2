@@ -51,6 +51,24 @@ class BinaryTree(ABC):
         self._post_order_traversal(node.right)
         print(node.key)
 
+    def is_binary_tree(self):
+        return self._is_binary_tree(self.root)
+
+    def _is_binary_tree(self, node):
+        if node is None:
+            return True
+
+        if node.left and node.left.key >= node.key:
+            return False
+
+        if node.right and node.right.key <= node.key:
+            return False
+
+        left_is_binary = self._is_binary_tree(node.left)
+        right_is_binary = self._is_binary_tree(node.right)
+
+        return left_is_binary and right_is_binary
+
     def search(self, key):
         """
         Search for a node with the given key in the tree.
@@ -73,6 +91,7 @@ class BinaryTree(ABC):
 
         return self._search(node.right, key)
 
+    @abstractmethod
     def insert(self, key):
         """
         Inserts a new key into the Tree.
@@ -80,11 +99,6 @@ class BinaryTree(ABC):
         Args:
             key: The key to be inserted into the Tree.
         """
-        self.root = self._insert(self.root, key)
-
-    @abstractmethod
-    def _insert(self, node, key):
-        pass
 
     def get_leaves(self):
         """
@@ -105,6 +119,7 @@ class BinaryTree(ABC):
         new_count = self._get_leaves(node.left, count)
         return self._get_leaves(node.right, new_count)
 
+    @abstractmethod
     def insertion_steps_and_rotation(self, key):
         """
         Perform an insertion of a key into the tree and return the number 
@@ -117,9 +132,3 @@ class BinaryTree(ABC):
         A tuple containing the number of steps taken during the 
         insertion process and 1 if a rotation occured or 0 otherwise.
         """
-        self.root, steps, rotation = self._insert_steps_and_rotation(self.root, key)
-        return (steps, rotation)
-
-    @abstractmethod
-    def _insert_steps_and_rotation(self, node, key):
-        pass

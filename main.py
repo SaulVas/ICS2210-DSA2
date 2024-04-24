@@ -32,30 +32,63 @@ if __name__ == "__main__":
         avl_tree.insert(number)
         rb_tree.insert(number)
 
+    print(rb_tree.is_rb_tree())
+
     # Insertion of Second array
     second_integers = [randint(1, 100000) for _ in range(1001)]
 
     # AVL Tree section
-    insertion_steps = []
-    rotations = []
+    insertion_steps = {
+        "avl": [],
+        "rb": [],
+        "skip_list": []
+        }
+    rotations = {
+        "avl": [],
+        "rb": [],
+        "skip_list": []
+        }
     for num in second_integers:
         steps, rotation = avl_tree.insertion_steps_and_rotation(num)
-        insertion_steps.append(steps)
-        rotations.append(rotation)
+        insertion_steps["avl"].append(steps)
+        rotations["avl"].append(rotation)
 
-    print("Insertion Steps Statistics:")
-    print(f"Minimum: {min(insertion_steps)}")
-    print(f"Maximum: {max(insertion_steps)}")
-    print(f"Mean: {mean(insertion_steps)}")
-    print(f"Standard Deviation: {stdev(insertion_steps)}")
-    print(f"Median: {median(insertion_steps)}\n")
+        # rb_tree.traverse("in_order")
+        # steps, rotation = rb_tree.insertion_steps_and_rotation(num)
+        # insertion_steps["rb"].append(steps)
+        # rotations["rb"].append(rotation)
 
-    print("Rotations Statistics:")
-    print(f"Minimum: {min(rotations)}")
-    print(f"Maximum: {max(rotations)}")
-    print(f"Mean: {mean(rotations)}")
-    print(f"Standard Deviation: {stdev(rotations)}")
-    print(f"Median: {median(rotations)}\n")
 
-    print(f"Tree Height: {avl_tree.root.height}")
-    print(f"Leaves: {avl_tree.get_leaves()}")
+    print("AVL Tree Insertion Steps Statistics:")
+    print(f"Minimum: {min(insertion_steps["avl"])}")
+    print(f"Maximum: {max(insertion_steps["avl"])}")
+    print(f"Mean: {mean(insertion_steps["avl"])}")
+    print(f"Standard Deviation: {stdev(insertion_steps["avl"])}")
+    print(f"Median: {median(insertion_steps["avl"])}\n")
+
+    print("AVL Tree Rotations Statistics:")
+    print(f"Minimum: {min(rotations["avl"])}")
+    print(f"Maximum: {max(rotations["avl"])}")
+    print(f"Mean: {mean(rotations["avl"])}")
+    print(f"Standard Deviation: {stdev(rotations["avl"])}")
+    print(f"Median: {median(rotations["avl"])}\n")
+
+    print(f"AVL Tree Height: {avl_tree.root.height}")
+    print(f"AVL Tree Leaves: {avl_tree.get_leaves()}\n")
+
+    # print("RB Tree Insertion Steps Statistics:")
+    # print(f"Minimum: {min(insertion_steps["rb"])}")
+    # print(f"Maximum: {max(insertion_steps["rb"])}")
+    # print(f"Mean: {mean(insertion_steps["rb"])}")
+    # print(f"Standard Deviation: {stdev(insertion_steps["rb"])}")
+    # print(f"Median: {median(insertion_steps["rb"])}\n")
+
+    # print("RB Tree Rotations Statistics:")
+    # print(f"Minimum: {min(rotations["rb"])}")
+    # print(f"Maximum: {max(rotations["rb"])}")
+    # print(f"Mean: {mean(rotations["rb"])}")
+    # print(f"Standard Deviation: {stdev(rotations["rb"])}")
+    # print(f"Median: {median(rotations["rb"])}\n")
+
+    # print(f"RB Tree Height: {avl_tree.root.height}")
+    # print(f"RB Tree Leaves: {avl_tree.get_leaves()}")

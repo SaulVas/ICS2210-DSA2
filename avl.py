@@ -27,6 +27,15 @@ class AVLTree(BinaryTree):
     """
     
     """
+    def insert(self, key):
+        """
+        Inserts a new key into the Tree.
+
+        Args:
+            key: The key to be inserted into the Tree.
+        """
+        self.root = self._insert(self.root, key)
+
     def _insert(self, node, key):
         # Rec cases
         if node is None:
@@ -83,6 +92,21 @@ class AVLTree(BinaryTree):
                                    self._get_height(left_tree.right))
 
         return left_tree
+
+    def insertion_steps_and_rotation(self, key):
+        """
+        Perform an insertion of a key into the tree and return the number 
+        of steps taken and whether a rotation was performed or not.
+
+        Parameters:
+        - key: The key to be inserted into the tree.
+
+        Returns:
+        A tuple containing the number of steps taken during the 
+        insertion process and 1 if a rotation occured or 0 otherwise.
+        """
+        self.root, steps, rotation = self._insert_steps_and_rotation(self.root, key)
+        return (steps, rotation)
 
     def _insert_steps_and_rotation(self, node, key):
         # Rec cases
