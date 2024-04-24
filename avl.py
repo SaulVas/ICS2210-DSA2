@@ -6,7 +6,6 @@ class AVLNode:
     """
     
     """
-
     def __init__(self, key):
         self.key = key
         self.left = None
@@ -140,3 +139,32 @@ class AVLTree(BinaryTree):
             return (self._rotate_left(node), steps + 1, rotation + 1)
 
         return (node, steps + 1, rotation)
+
+    def is_avl_tree(self):
+        return self._is_avl_tree(self.root)
+
+    def _is_avl_tree(self, node):
+        # subtree is empty
+        if not node:
+            return True
+
+        # check node has correct height
+        height_left = self._get_height(node.left)
+        height_right = self._get_height(node.right)
+        if node.height != 0:
+            if node.height != 1 + max(height_left, height_right):
+                return False
+
+        # check balance factor of the node
+        bal_factor = height_left - height_right
+        if not (bal_factor >= -1 and bal_factor <= 1):
+            return False
+
+        # check circular references
+        if node.left is node or node.right is node:
+            return False
+
+        left_tree = self._is_avl_tree(node.left)
+        right_tree = self._is_avl_tree(node.right)
+
+        return all([left_tree, right_tree])
