@@ -113,7 +113,7 @@ class BinaryTree(ABC):
     def _get_leaves(self, node, count):
         if not node:
             return count
-        if node.left is None and node.right is None:
+        if not node.left and not node.right:
             return count + 1
 
         new_count = self._get_leaves(node.left, count)

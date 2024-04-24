@@ -100,10 +100,6 @@ class RedBlackTree(BinaryTree):
 
     def _resolve_problems(self, node):
         parent = node.parent
-
-        if not parent.red:
-            return
-
         grandparent = parent.parent
 
         # check for inside
@@ -129,13 +125,57 @@ class RedBlackTree(BinaryTree):
             parent.red = False
 
     def insertion_steps_and_rotation(self, key):
-        pass
+        return self._insertion_steps_and_rotation(self.root, key, 0, 0)
 
-    def _insert_steps(self, node, key):
-        pass
+    def _insertion_steps_and_rotation(self, node, key, steps, rotations):
+        parent = None
+        current_node = node
+        while True:
+            steps += 1
+            # insert here
+            if current_node is None:
+                current_node = RedBlackNode(key, parent=parent)
+                # new node is root
+                if not current_node.parent:
+                    current_node.red = False
+                    self.root = current_node
+                else:
+                    # set parents pointer to new node
+                    if current_node.key < parent.key:
+                        parent.left = current_node
+                    else:
+                        parent.right = current_node
+                    # check for conflicts
+                    if parent.red:
+                        self._resolve_problems(current_node)
+                        rotations += 1
 
-    def _restore_rb_properties_tracking_rotations(self, node, root, rotations):
-        pass
+                break
+
+            parent = current_node.parent
+
+            # remove red uncles
+            if not current_node.red:
+                # black node with red children
+                if current_node.left and current_node.left.red:
+                    if current_node.right and current_node.right.red:
+                        current_node.left.red = False
+                        current_node.right.red = False
+                        if parent:
+                            current_node.red = True
+
+                        # check for red red violations and then rotate
+                        if parent and parent.red:
+                            self._resolve_problems(current_node)
+                            rotations += 1
+
+            parent = current_node
+            if key < current_node.key:
+                current_node = current_node.left
+            else:
+                current_node = current_node.right
+
+        return (steps, rotations)
 
     def is_rb_tree(self):
         return self._is_rb_tree(self.root)[0]
@@ -159,3 +199,14 @@ class RedBlackTree(BinaryTree):
         left, n_blacks_left = self._is_rb_tree(node.left)
 
         return all([right, left, n_blacks_right == n_blacks_left]), n_blacks_right + n_blacks
+
+    def get_height(self):
+        return self._get_height(self.root)
+
+    def _get_height(self, node):
+        if not node:
+            return 0
+
+        left_height = self._get_height(node.left)
+        right_height = self._get_height(node.right)
+        return 1 + max(left_height, right_height)
