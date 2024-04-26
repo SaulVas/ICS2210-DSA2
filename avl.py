@@ -1,6 +1,6 @@
 """
 """
-from binary_tree import BinaryTree
+from BinaryTree import BinaryTree
 
 class AVLNode:
     """

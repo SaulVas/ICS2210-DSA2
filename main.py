@@ -4,8 +4,9 @@
 
 from random import randint
 from statistics import mean, stdev, median
-from avl import AVLTree
-from red_black import RedBlackTree
+from AVL import AVLTree
+from RedBlack import RedBlackTree
+from SkipList import SkipList
 
 def knuth_shuffle(array):
     """
@@ -28,9 +29,11 @@ if __name__ == "__main__":
     # initial insert
     avl_tree = AVLTree()
     rb_tree = RedBlackTree()
+    skip_list = SkipList()
     for number in integers:
         avl_tree.insert(number)
         rb_tree.insert(number)
+        skip_list.insert(number)
 
     # Insertion of Second array
     second_integers = [randint(1, 100000) for _ in range(1001)]

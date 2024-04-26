@@ -1,4 +1,4 @@
-from binary_tree import BinaryTree
+from BinaryTree import BinaryTree
 
 class RedBlackNode:
     def __init__(self, key, is_red=True, parent=None):
