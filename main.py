@@ -47,8 +47,8 @@ if __name__ == "__main__":
     rotations = {
         "avl": [],
         "rb": [],
-        "skip_list": []
         }
+    promotions = []
     for num in second_integers:
         steps, rotation = avl_tree.insertion_steps_and_rotation(num)
         insertion_steps["avl"].append(steps)
@@ -57,6 +57,10 @@ if __name__ == "__main__":
         steps, rotation = rb_tree.insertion_steps_and_rotation(num)
         insertion_steps["rb"].append(steps)
         rotations["rb"].append(rotation)
+
+        steps, promotion = skip_list.insert_steps_and_promotions(num)
+        insertion_steps["skip_list"].append(steps)
+        promotions.append(promotion)
 
 
     print("AVL Tree Insertion Steps Statistics:")
@@ -92,3 +96,19 @@ if __name__ == "__main__":
 
     print(f"RB Tree Height: {rb_tree.get_height()}")
     print(f"RB Tree Leaves: {rb_tree.get_leaves()}")
+
+    print("Skip List Insertion Steps Statistics:")
+    print(f"Minimum: {min(insertion_steps["skip_list"])}")
+    print(f"Maximum: {max(insertion_steps["skip_list"])}")
+    print(f"Mean: {mean(insertion_steps["skip_list"])}")
+    print(f"Standard Deviation: {stdev(insertion_steps["skip_list"])}")
+    print(f"Median: {median(insertion_steps["skip_list"])}\n")
+
+    print("Skip List Promotions Statistics:")
+    print(f"Minimum: {min(promotions)}")
+    print(f"Maximum: {max(promotions)}")
+    print(f"Mean: {mean(promotions)}")
+    print(f"Standard Deviation: {stdev(promotions)}")
+    print(f"Median: {median(promotions)}\n")
+
+    print(f"Skip List Levels: {skip_list.max_height}")

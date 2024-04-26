@@ -99,10 +99,43 @@ class SkipList:
                 current_node = current_node.next[level]
 
             # update next and previous pointers
-            new_node.previous[level] = current_node
-            new_node.next[level] = current_node.next[level]
-            current_node.next[level] = new_node
-            # Node isn't at the end of a list
-            if new_node.next[level]:
-                next_node = new_node.next[level]
-                next_node.previous[level] = new_node
+            if level < len(new_node.next):
+                new_node.previous[level] = current_node
+                new_node.next[level] = current_node.next[level]
+                current_node.next[level] = new_node
+                # Node isn't at the end of a list
+                if new_node.next[level]:
+                    next_node = new_node.next[level]
+                    next_node.previous[level] = new_node
+
+    def insert_steps_and_promotions(self, value):
+        steps = 0
+        promotions = self._get_new_height()
+        new_node = SkipNode(promotions, value)
+        head = self.head
+
+        # update max height and head next values
+        self.max_height = max(self.max_height, len(new_node.next))
+        while len(head.next) < len(new_node.next):
+            head.next.append(None)
+            head.previous.append(None)
+
+        # find the correct place at each level
+        current_node = self.head
+        for level in reversed(range(self.max_height)):
+            while current_node.next[level] and current_node.next[level] < value:
+                current_node = current_node.next[level]
+                steps += 1
+
+            # update next and previous pointers
+            if level < len(new_node.next):
+                new_node.previous[level] = current_node
+                new_node.next[level] = current_node.next[level]
+                current_node.next[level] = new_node
+                # Node isn't at the end of a list
+                if new_node.next[level]:
+                    next_node = new_node.next[level]
+                    next_node.previous[level] = new_node
+
+        # promotions - 1 because by default it will be in the bottom list
+        return (steps, promotions - 1)
